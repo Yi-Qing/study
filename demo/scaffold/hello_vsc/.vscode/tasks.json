@@ -1,17 +1,19 @@
 {
-    // !!! don't use cmd.exe as default terminal
     "version": "2.0.0",
     "options": {
-        "cwd": "${workspaceRoot}",
+        "cwd": "${workspaceRoot}"
     },
     "windows": {
-        // use this section for windeploy and qtDesigner
         "options": {
-            "cwd": "${workspaceRoot}",
             "env": {
-                // "PATH": "${env:PATH};D:/software/Qt/5.15.2/msvc2019_64/bin/;",
-                "PATH": "${env:PATH};D:/software/Qt/6.2.4/msvc2019_64/bin/;",
+                "PATH": "${env:PATH};C:/Users/Public/app/Qt/6.2.4/msvc2019_64;C:/Users/Public/app/Qt/6.2.4/msvc2019_64/bin;",
             },
+            "shell": {
+                "executable": "C:/Program Files/Microsoft Visual Studio/2022/BuildTools/VC/Auxiliary/Build/vcvars64.bat",
+                "args": [
+                    "&&",
+                ]
+            }
         },
     },
     "presentation": {
@@ -30,18 +32,19 @@
             "group": "none",
             "command": "cmake",
             "args": [
+                "-G",
+                "\"Ninja Multi-Config\"",
                 "-S",
                 ".",
                 "-B",
                 "build",
-                // "-DCMAKE_PREFIX_PATH=D:/software/Qt/5.15.2/msvc2019_64",
-                "-DCMAKE_PREFIX_PATH=D:/software/Qt/6.2.4/msvc2019_64",
-                "-DCMAKE_CONFIGURATION_TYPES='Debug;Release;RelWithDebInfo;MinSizeRel'",
+                "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+                "-DCMAKE_CONFIGURATION_TYPES='Debug;Release;RelWithDebInfo;MinSizeRel'"
             ],
             "presentation": {
                 "clear": true
             },
-            "hide": true,
+            "hide": true
         },
         {
             "label": "Debug",
@@ -52,13 +55,13 @@
                 "--build",
                 "build",
                 "--config",
-                "Debug",
+                "Debug"
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
                 "Init"
             ],
-            "hide": true,
+            "hide": true
         },
         {
             "label": "Release",
@@ -69,44 +72,13 @@
                 "--build",
                 "build",
                 "--config",
-                "Release",
+                "MinSizeRel"
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
                 "Init"
             ],
-            "hide": true,
-        },
-        {
-            "label": "vsJson",
-            "detail": "parse compile_commands.json from vs sln file and build Debug",
-            "type": "shell",
-            "group": "build",
-            "command": "./resources/vs_export.exe",
-            "args": [
-                "-s",
-                "./build/${workspaceFolderBasename}.sln",
-                "-c",
-                "'Debug|x64'",
-            ],
-            "dependsOrder": "sequence",
-            "dependsOn": [
-                "Debug"
-            ],
-        },
-        {
-            "label": "Deploy",
-            "detail": "run Qt windeploy",
-            "type": "shell",
-            "group": "build",
-            "command": "windeployqt",
-            "args": [
-                "./build/Release/${workspaceFolderBasename}.exe"
-            ],
-            "dependsOrder": "sequence",
-            "dependsOn": [
-                "Release"
-            ],
+            "hide": true
         },
         {
             "label": "QtDesigner",
@@ -119,8 +91,26 @@
             ],
             "presentation": {
                 "echo": false,
-                "showReuseMessage": false,
+                "showReuseMessage": false
             },
+            "hide": true
         },
+        {
+            "label": "Deploy",
+            "detail": "run Qt windeploy",
+            "type": "shell",
+            "group": "build",
+            "windows": {
+                "command": "windeployqt",
+                "args": [
+                    "./build/Release/${workspaceFolderBasename}.exe"
+                ]
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Release"
+            ],
+            "problemMatcher": []
+        }
     ]
 }

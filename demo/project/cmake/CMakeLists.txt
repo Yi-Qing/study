@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 
 project(demo VERSION 0.1.2.3)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 if(NOT QT_QMAKE_EXECUTABLE AND (CMAKE_GENERATOR MATCHES "Ninja*"))
     if (((CMAKE_C_COMPILER_ID STREQUAL "GNU") AND
         (CMAKE_C_COMPILER_VERSION VERSION_GREATER_EQUAL 4.9)) OR
@@ -19,6 +21,13 @@ if(NOT QT_QMAKE_EXECUTABLE AND (CMAKE_GENERATOR MATCHES "Ninja*"))
     endif()
 endif()
 
+if(WIN32)
+    # Specify MSVC UTF-8 encoding
+    add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
+    add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+    # Only Debug mode create terminal as stdout
+    set(CMAKE_WIN32_EXECUTABLE $<$<NOT:$<CONFIG:DEBUG>>:ON>)
+endif(WIN32)
+
 add_subdirectory(main main/)
 add_subdirectory(modules modules/)
-

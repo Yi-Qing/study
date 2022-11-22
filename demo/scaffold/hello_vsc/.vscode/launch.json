@@ -2,20 +2,23 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "runDbg",
-            "type": "cppvsdbg",
+            "name": "runDebug",
+            "type": "gdb",
             "request": "launch",
+            "target": "${workspaceRoot}/build/Debug/${workspaceFolderBasename}",
             "cwd": "${workspaceRoot}",
-            "program": "${workspaceFolder}/build/Debug/${workspaceFolderBasename}",
-            "environment": [
-                {
-                    "name": "PATH",
-                    // "value": "${env:PATH};D:/software/Qt/5.15.2/msvc2019_64/bin/;",
-                    "value": "${env:PATH};D:/software/Qt/6.2.4/msvc2019_64/bin/;",
-                }
-            ],
+            "windows": {
+                "type": "cppvsdbg",
+                "program": "${workspaceRoot}/build/Debug/${workspaceFolderBasename}.exe",
+                "environment": [
+                    {
+                        "name": "PATH",
+                        "value": "${env:PATH};C:/Users/Public/app/Qt/6.2.4/msvc2019_64/bin;",
+                    }
+                ],
+            },
             "preLaunchTask": "Debug",
-            "internalConsoleOptions": "openOnSessionStart",
-        },
+            "internalConsoleOptions": "openOnSessionStart"
+        }
     ]
 }
