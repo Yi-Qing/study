@@ -6,6 +6,7 @@ a.out
 *.o
 *.user
 compile_commands.json
+*.patch
 
 # vscode
 .vscode/
