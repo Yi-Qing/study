@@ -1,0 +1,19 @@
+# common
+.cache/
+out/
+build*/
+a.out
+*.o
+*.user
+compile_commands.json
+
+# vscode
+.vscode/
+
+# MDK
+*.uvguix.*
+*.uvgui.*
+JLinkLog.txt
+Listings/
+Objects/
+
