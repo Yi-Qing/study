@@ -1,10 +1,13 @@
 #include "widget.hpp"
 #include "./ui_widget.h"
-#include <qwidget.h>
+#include <QDebug>
+#include <QIcon>
+#include <QWidget>
 
 Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget)
 {
-    ui->setupUi(this);
+    this->ui->setupUi(this);
+    this->setWindowIcon(QIcon(":/icon.ico"));
 
     connect(ui->pushButton, &QPushButton::clicked, this, &Widget::toogleShow);
 }
@@ -15,9 +18,11 @@ void Widget::toogleShow()
 
     if (!flag) {
         ui->lineEdit->setText("hello world");
+        qDebug() << "need show";
         flag = true;
     } else {
         ui->lineEdit->clear();
+        qDebug() << "need hide";
         flag = false;
     }
 }

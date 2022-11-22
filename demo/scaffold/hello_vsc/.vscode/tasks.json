@@ -1,27 +1,28 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
+    // !!! don't use cmd.exe as default terminal
     "version": "2.0.0",
     "options": {
         "cwd": "${workspaceRoot}",
     },
     "windows": {
+        // use this section for windeploy and qtDesigner
         "options": {
             "cwd": "${workspaceRoot}",
             "env": {
-                // "PATH": "${env:PATH};C:/Qt/Qt5/5.15.2/msvc2019_64/;C:/Qt/Qt5/5.15.2/msvc2019_64/bin/;",
-                "PATH": "${env:PATH};C:/Qt/Qt5/5.15.2/mingw81_64/;C:/Qt/Qt5/5.15.2/mingw81_64/bin/;",
+                // "PATH": "${env:PATH};D:/software/Qt/5.15.2/msvc2019_64/bin/;",
+                "PATH": "${env:PATH};D:/software/Qt/6.2.4/msvc2019_64/bin/;",
             },
-            // "shell": {
-            //     "executable": "cmd.exe",
-            //     "args": [
-            //         "/C",
-            //         "\"C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Auxiliary/Build/vcvars64.bat\"",
-            //         "&&",
-            //     ]
-            // },
         },
     },
+    "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false,
+    },
+    "problemMatcher": [],
     "tasks": [
         {
             "label": "Init",
@@ -29,23 +30,18 @@
             "group": "none",
             "command": "cmake",
             "args": [
-                "-G",
-                "Ninja Multi-Config",
                 "-S",
                 ".",
                 "-B",
                 "build",
+                // "-DCMAKE_PREFIX_PATH=D:/software/Qt/5.15.2/msvc2019_64",
+                "-DCMAKE_PREFIX_PATH=D:/software/Qt/6.2.4/msvc2019_64",
                 "-DCMAKE_CONFIGURATION_TYPES='Debug;Release;RelWithDebInfo;MinSizeRel'",
             ],
             "presentation": {
-                "echo": true,
-                "reveal": "silent",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": true,
+                "clear": true
             },
-            "problemMatcher": []
+            "hide": true,
         },
         {
             "label": "Debug",
@@ -57,22 +53,12 @@
                 "build",
                 "--config",
                 "Debug",
-                "--",
-                "-j8"
             ],
-            "presentation": {
-                "echo": true,
-                "reveal": "silent",
-                "focus": true,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
             "dependsOrder": "sequence",
             "dependsOn": [
                 "Init"
             ],
-            "problemMatcher": []
+            "hide": true,
         },
         {
             "label": "Release",
@@ -83,41 +69,58 @@
                 "--build",
                 "build",
                 "--config",
-                "MinSizeRel",
-                "--",
-                "-j8"
+                "Release",
             ],
-            "presentation": {
-                "echo": true,
-                "reveal": "silent",
-                "focus": true,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
             "dependsOrder": "sequence",
             "dependsOn": [
                 "Init"
             ],
-            "problemMatcher": []
+            "hide": true,
+        },
+        {
+            "label": "vsJson",
+            "detail": "parse compile_commands.json from vs sln file and build Debug",
+            "type": "shell",
+            "group": "build",
+            "command": "./resources/vs_export.exe",
+            "args": [
+                "-s",
+                "./build/${workspaceFolderBasename}.sln",
+                "-c",
+                "'Debug|x64'",
+            ],
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Debug"
+            ],
+        },
+        {
+            "label": "Deploy",
+            "detail": "run Qt windeploy",
+            "type": "shell",
+            "group": "build",
+            "command": "windeployqt",
+            "args": [
+                "./build/Release/${workspaceFolderBasename}.exe"
+            ],
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Release"
+            ],
         },
         {
             "label": "QtDesigner",
+            "detail": "open Qt ui file with QtDesigner",
             "type": "process",
             "group": "none",
-            "command": "designer.exe",
+            "command": "designer",
             "args": [
                 "${relativeFile}"
             ],
             "presentation": {
                 "echo": false,
-                "reveal": "silent",
-                "focus": false,
-                "panel": "shared",
                 "showReuseMessage": false,
-                "clear": false
             },
-            "problemMatcher": []
         },
     ]
 }

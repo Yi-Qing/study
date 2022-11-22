@@ -1,24 +1,21 @@
 {
-    // 使用 IntelliSense 了解相关属性。
-    // 悬停以查看现有属性的描述。
-    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "runDebug",
-            "type": "gdb",
+            "name": "runDbg",
+            "type": "cppvsdbg",
             "request": "launch",
-            "target": "./build/Debug/${workspaceFolderBasename}",
             "cwd": "${workspaceRoot}",
-            "windows": {
-                "env": {
-                    "PATH": "${env:PATH};C:/Qt/Qt5/5.15.2/mingw81_64/bin/;C:/Qt/Qt5/Tools/mingw810_64/bin/;",
-                    // "PATH": "${env:PATH};C:/Qt/Qt5/5.15.2/msvc2019_64/;C:/Qt/Qt5/5.15.2/msvc2019_64/bin/;",
-                },
-            },
-            "valuesFormatting": "prettyPrinters",
+            "program": "${workspaceFolder}/build/Debug/${workspaceFolderBasename}",
+            "environment": [
+                {
+                    "name": "PATH",
+                    // "value": "${env:PATH};D:/software/Qt/5.15.2/msvc2019_64/bin/;",
+                    "value": "${env:PATH};D:/software/Qt/6.2.4/msvc2019_64/bin/;",
+                }
+            ],
             "preLaunchTask": "Debug",
             "internalConsoleOptions": "openOnSessionStart",
-        }
+        },
     ]
 }
