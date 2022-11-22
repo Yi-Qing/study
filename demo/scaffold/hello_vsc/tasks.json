@@ -1,0 +1,125 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "options": {
+        "cwd": "${workspaceRoot}",
+        "env": {
+            "PATH": "${env:PATH};C:/Qt/Qt5/5.15.2/mingw81_64/;C:/Qt/Qt5/5.15.2/mingw81_64/bin/;C:/Qt/Qt5/Tools/mingw810_64/bin/;",
+        },
+    },
+    // "windows": {
+    //     "options": {
+    //         "cwd": "${workspaceRoot}",
+    //         "env": {
+    //             "PATH": "${env:PATH};C:/Qt/Qt5/5.15.2/msvc2019_64/;",
+    //         },
+    //         "shell": {
+    //             "executable": "cmd.exe",
+    //             "args": [
+    //                 "/C",
+    //                 "\"C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Auxiliary/Build/vcvars64.bat\"",
+    //                 "&&",
+    //             ]
+    //         },
+    //     },
+    // },
+    "tasks": [
+        {
+            "label": "Init",
+            "type": "shell",
+            "group": "build",
+            "command": "cmake",
+            "args": [
+                "-G",
+                "'Ninja Multi-Config'",
+                "-S",
+                ".",
+                "-B",
+                "build",
+                "-DCMAKE_CONFIGURATION_TYPES='Debug;Release;RelWithDebInfo;MinSizeRel'"
+            ]
+        },
+        {
+            "label": "Debug",
+            "type": "shell",
+            "group": "build",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+                "--config",
+                "Debug",
+                "--",
+                "-j8"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Init"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Release",
+            "type": "shell",
+            "group": "build",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+                "--config",
+                "Release",
+                "--",
+                "-j8"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Init"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "QtDesigner",
+            "type": "process",
+            "group": "none",
+            "command": "designer.exe",
+            "args": [
+                "${relativeFile}"
+            ],
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "echo",
+            "type": "shell",
+            "command": "echo",
+            "args": [
+                "%path%"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}
