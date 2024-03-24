@@ -1,6 +1,6 @@
 project = test
 
-PREFIX =
+PREFIX ?=
 CC  = $(PREFIX)gcc
 CXX = $(PREFIX)g++
 ASM = $(PREFIX)gcc
@@ -8,7 +8,7 @@ CP  = $(PREFIX)objcopy
 SZ  = $(PREFIX)size
 
 out_dir ?= .
-src_dir ?= . src
+src_dir += . src
 
 c_src   := $(wildcard $(foreach f, $(src_dir), $(f)/*.c))
 cxx_src := $(wildcard $(foreach f, $(src_dir), $(f)/*.cpp))
@@ -48,18 +48,18 @@ all: build_prepare $(project)
 	@echo build success ......
 
 $(project): $(foreach f, $(jobs), $(out_dir)/$(f))
-	$(CC) $(LDFLAGS) $^ -o $@
+	$(CC) $^ $(LDFLAGS) -o $@
 
 -include $(deps)
 
 $(out_dir)/%.o : %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $@.d
+	$(CC) -c $< $(CFLAGS) -o $@ -MD -MF $@.d
 
 $(out_dir)/%.o : %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $@.d
+	$(CXX) -c $< $(CXXFLAGS) -o $@ -MD -MF $@.d
 
 $(out_dir)/%.o : %.s
-	$(ASM) $(ASMFLAGS) -c $< -o $@ -MD -MF $@.d
+	$(ASM) -c $< $(ASMFLAGS) -o $@ -MD -MF $@.d
 
 .PHONY : clean
 ifeq ($(out_dir), .)
@@ -72,5 +72,5 @@ endif
 
 .PHONY : build_prepare
 build_prepare:
-	@mkdir -p $(prepare_path)
+	@/bin/mkdir -p $(prepare_path)
 
