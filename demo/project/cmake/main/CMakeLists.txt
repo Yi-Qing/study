@@ -22,4 +22,3 @@ target_include_directories(${CMAKE_PROJECT_NAME}
     )
 
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin/)
-

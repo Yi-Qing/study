@@ -31,4 +31,3 @@ if(WORLD_MODULE_TEST)
 
     set_target_properties(world_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin/module_world)
 endif()
-
