@@ -14,9 +14,11 @@
 对于`CMAKE`项目：
 ```cmake
 add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
-add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 ```
 > Tips: 需要放置在`add_executable()`之前才能生效
+
+> Tips: 使用`/utf-8`会同步修改执行时的字符集，在未启用`UTF-8`的系统命令行上会在执行时乱码。
+    推荐使用`/source-charset:utf-8`代替
 
 对于`QMAKE`项目：
 ```qmake
