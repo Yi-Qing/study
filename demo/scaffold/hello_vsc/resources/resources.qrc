@@ -1,5 +1,6 @@
 <RCC>
-    <qresource prefix="/">
-        <file>icon.ico</file>
-    </qresource>
+  <qresource prefix="/">
+    <file alias="icon.ico">D:/own/study/demo/scaffold/hello_vsc/resources/icon.ico</file>
+  </qresource>
 </RCC>
+

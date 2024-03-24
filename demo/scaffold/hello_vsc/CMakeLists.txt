@@ -6,49 +6,64 @@ enable_language(CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if(CMAKE_GENERATOR MATCHES "Ninja*")
-    # for use this flag, need gcc >= 4.9 || clang >= 3.5
-    if ((CMAKE_C_COMPILER_ID STREQUAL "GNU") OR (CMAKE_C_COMPILER_ID STREQUAL "Clang"))
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fdiagnostics-color=always")
-    endif()
-    if ((CMAKE_C_COMPILER_ID STREQUAL "GNU") OR (CMAKE_C_COMPILER_ID STREQUAL "Clang"))
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=always")
-    endif()
-elseif(CMAKE_GENERATOR MATCHES "Visual Studio *")
-    # use multiple processes compiler
-    add_compile_options("$<$<C_COMPILER_ID:MSVC>:/MP>")
-    add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/MP>")
-endif()
-
-if(WIN32)
-    # Specify MSVC UTF-8 encoding
-    add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
-    add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
-    # only Debug mode create console for stdout
-    set(CMAKE_WIN32_EXECUTABLE $<$<NOT:$<CONFIG:DEBUG>>:ON>)
-endif(WIN32)
-
 # set default Qt version is Qt6
 find_package(Qt6 COMPONENTS Widgets)
 if (NOT Qt6_FOUND)
+    # only support Qt 5.15
     find_package(Qt5 5.15 REQUIRED COMPONENTS Widgets)
 endif()
 
-set(ICON_FILE ${PROJECT_SOURCE_DIR}/resources/icon.rc)
+if(CMAKE_GENERATOR MATCHES "Ninja*")
+    # enable color compilation information, need (gcc >= v4.9 || clang >= 3.5)
+    add_compile_options("$<$<NOT:$<BOOL:${MSVC}>>:-fdiagnostics-color=always>")
+elseif(CMAKE_GENERATOR MATCHES "Visual Studio *")
+    # use multiple processes compiler
+    add_compile_options("$<$<BOOL:${MSVC}>:/MP>")
+endif()
+
+if (MSVC)
+    # warning level 4 and all warnings as errors
+    add_compile_options(/utf-8 /W4 /WX)
+else()
+    # lots of warnings and all warnings as errors
+    add_compile_options(-Wall -Wextra -Werror)
+endif()
 
 include_directories(${PROJECT_SOURCE_DIR}/widget)
 
 aux_source_directory(${PROJECT_SOURCE_DIR}/ SRCS)
 aux_source_directory(${PROJECT_SOURCE_DIR}/widget SRCS)
 
+if (NOT Qt6_FOUND)
+    # Qt5 and Qt6 compatible
+    set(CMAKE_AUTORCC ON)
+    qt_add_resources(SRCS ${PROJECT_SOURCE_DIR}/resources/resources.qrc)
+endif()
+
+if(WIN32)
+    set(ICON_FILE ${PROJECT_SOURCE_DIR}/resources/icon.rc)
+endif()
+
 add_executable(${CMAKE_PROJECT_NAME}
     ${SRCS}
     ${ICON_FILE}
 )
 
+if (Qt6_FOUND)
+    qt_add_resources(${CMAKE_PROJECT_NAME} "rcfiles"
+        PREFIX "/"
+        BASE "${PROJECT_SOURCE_DIR}/resources"
+        FILES ${PROJECT_SOURCE_DIR}/resources/icon.ico
+    )
+endif()
+
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt::Widgets)
+
+set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
+    WIN32_EXECUTABLE ON
+    # MACOSX_BUNDLE ON    # not support OSX yet
+)

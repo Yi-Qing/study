@@ -1,28 +1,33 @@
 {
     "version": "2.0.0",
     "options": {
-        "cwd": "${workspaceRoot}"
+        "cwd": "${workspaceRoot}",
+        "env": {
+            "CMAKE_GENERATOR": "Ninja Multi-Config" // cmake version >= 3.15
+        }
     },
-    "windows": {
-        "options": {
-            "env": {
-                "PATH": "${env:PATH};C:/Users/Public/app/Qt/6.2.4/msvc2019_64;C:/Users/Public/app/Qt/6.2.4/msvc2019_64/bin;",
-            },
-            "shell": {
-                "executable": "C:/Program Files/Microsoft Visual Studio/2022/BuildTools/VC/Auxiliary/Build/vcvars64.bat",
-                "args": [
-                    "&&",
-                ]
-            }
-        },
-    },
+    // "windows": {
+    //     "options": {
+    //         "env": {
+    //             "PATH": "${env:PATH};C:/Qt/5.15.2/msvc2019_64;C:/Qt/5.15.2/msvc2019_64/bin;",
+    //         }
+    //     },
+    //     "options": {
+    //         "shell": {
+    //             "executable": "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Auxiliary/Build/vcvars64.bat",
+    //             "args": [
+    //                 "&&",
+    //             ]
+    //         }
+    //     },
+    // },
     "presentation": {
         "echo": true,
         "reveal": "silent",
-        "focus": true,
+        "focus": false,
         "panel": "shared",
         "showReuseMessage": true,
-        "clear": false,
+        "clear": false
     },
     "problemMatcher": [],
     "tasks": [
@@ -32,8 +37,6 @@
             "group": "none",
             "command": "cmake",
             "args": [
-                "-G",
-                "\"Ninja Multi-Config\"",
                 "-S",
                 ".",
                 "-B",
@@ -42,7 +45,8 @@
                 "-DCMAKE_CONFIGURATION_TYPES='Debug;Release;RelWithDebInfo;MinSizeRel'"
             ],
             "presentation": {
-                "clear": true
+                "clear": true,
+                "focus": true,
             },
             "hide": true
         },
@@ -72,7 +76,7 @@
                 "--build",
                 "build",
                 "--config",
-                "MinSizeRel"
+                "Release"
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
@@ -95,17 +99,18 @@
             },
             "hide": true
         },
-        {
+        { // TODO: Use cmake install and cpack instead
             "label": "Deploy",
-            "detail": "run Qt windeploy",
+            "detail": "build Release and deploy",
             "type": "shell",
             "group": "build",
             "windows": {
-                "command": "windeployqt",
+                "command": "sh",
                 "args": [
-                    "./build/Release/${workspaceFolderBasename}.exe"
+                    "-c",
+                    "windeployqt ./build/Release/${workspaceFolderBasename}.exe && ldd build/Release/hello_vsc.exe | grep ucrt64 | cut -d \" \" -f 3 | xargs.exe -i cp {} ./build/Release/"
                 ]
-            },
+            }, // TODO: linux deb/appimage
             "dependsOrder": "sequence",
             "dependsOn": [
                 "Release"

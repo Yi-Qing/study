@@ -2,6 +2,8 @@
 #include "./ui_widget.h"
 #include <QDebug>
 #include <QIcon>
+#include <QSlider>
+#include <QSpinBox>
 #include <QWidget>
 
 Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget)
@@ -10,6 +12,11 @@ Widget::Widget(QWidget* parent) : QWidget(parent), ui(new Ui::Widget)
     this->setWindowIcon(QIcon(":/icon.ico"));
 
     connect(ui->pushButton, &QPushButton::clicked, this, &Widget::toogleShow);
+
+    void (QSpinBox::*singalcal_changed)(int) = &QSpinBox::valueChanged;
+    connect(ui->spinBox, singalcal_changed, ui->horizontalSlider, &QSlider::setValue);
+    // connect(ui->spinBox, &QSpinBox::valueChanged, ui->horizontalSlider, &QSlider::setValue);
+    connect(ui->horizontalSlider, &QSlider::valueChanged, ui->spinBox, &QSpinBox::setValue);
 }
 
 void Widget::toogleShow()
