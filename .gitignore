@@ -7,6 +7,11 @@ a.out
 *.user
 compile_commands.json
 *.patch
+*.exe
+*.a
+*.so
+*.lib
+*.dll
 
 # vscode
 .vscode/
@@ -18,3 +23,8 @@ JLinkLog.txt
 Listings/
 Objects/
 
+
+# msvc
+*.obj
+
+# add
