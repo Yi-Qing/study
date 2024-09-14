@@ -9,33 +9,29 @@
 ├── kernel
 ├── language
 ├── picture
-├── project
-└── scaffold
+└── system
 ```
 
 ## application
-应用层软件相关代码，如Qt，安卓HAL库，Linux下C/C++编程。
+应用程序使用相关，如vscode，vim，git，make，cmake，cli程序等。
 
 ## bareMetal
-单片机裸机编程，暂时不涉及RTOS。
+单片机裸机编程，不涉及RTOS。
 
 ## criteria
 一些标准相关的东西，如elf格式，硬件协议等。
 
 ## debug
-调试相关的手段。
+调试相关的手段，更多是从其他路径软连接过来的，只是在这里统一归类。
 
 ## kernel
-操作系统相关代码，如Android、Linux，RTThread。
+操作系统相关文档，如Android、Linux，RTThread。
 
 ## language
 编程语言基础学习代码。
 
+## system
+操作系统应用配置方面，如linux发行版使用，win使用，wsl使用等。
+
 ## picture
-可能会用到的资源文件。
-
-## project
-项目管理相关示例，主要是cmake和makefile。
-
-## scaffold
-工具使用相关资料，如vscode，binutils等。
+文档中使用的所以图片文件。
