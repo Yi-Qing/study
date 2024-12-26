@@ -1,5 +1,3 @@
-# 目录
-
 # 常用托管平台
 1. [github](https://github.com/): 全球最大, 但是国内访问较慢
 2. [码云gitee](https://gitee.com/): 国内托管平台, 由于可以快速将github的仓库导入到该平台, 往往作为一个工具平台.
@@ -73,3 +71,31 @@ debain系linux系统安装: sudo apt install git
 > 将文件添加到暂存区, 使用`-p`参数选择添加文件部分内容
 
 ![git各区域和命令的关系](../picture/git_relationship_of_region_and_commond.png)
+
+# git 导出
+使用git的archive功能可以快速导出代码到压缩包，命令如下：
+```bash
+git archive --format=tar.gz --output=code.tar.gz --prefix=code/ master
+```
+> 注：master可以替换为其他分支名
+> 注：--format参数可以指定压缩格式，如zip、tar.gz等
+> 注：--output参数可以指定导出文件名
+> 注：--prefix参数可以指定导出时添加前缀目录
+
+# proxy
+由于git分多种协议，目前常用的是`ssh`和`https/s`协议，对于`http/s`协议比较简单，只需要：
+```bash
+git config --global http.proxy http://127.0.0.1:1080
+```
+或者指定特定网站使用：
+```bash
+git config --global http.https://github.com.proxy http://127.0.0.1:1080
+```
+但是还有一种是`ssh`协议，就比较麻烦，需要配置`ssh`的参数：
+```bash
+$ cat ~/.ssh/config
+Host github.com
+Hostname ssh.github.com
+Port 443
+ProxyCommand nc -v -x 127.0.0.1:10808 %h %p
+```

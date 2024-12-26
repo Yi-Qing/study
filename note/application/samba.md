@@ -1,3 +1,8 @@
+# 依赖包
+```bash
+sudo apt install cifs-utils -y
+```
+
 # 挂载方式
 ```fstab
 //192.168.0.66/smb /srv/smb cifs file_mode=0664,dir_mode=0775,gid=sambashare,credentials=/root/.smbcredentials,x-systemd.automount,x-systemd.mount-timeout=30,_netdev 0 0
