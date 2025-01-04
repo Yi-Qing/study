@@ -368,7 +368,6 @@ export TSLIB_CALIBFILE=/etc/pointercal
 export TSLIB_CONFFILE=/etc/ts.conf
 export TSLIB_CONSOLEDEVICE=none
 export TSLIB_PLUGINDIR=/usr/lib/ts
-export QT_QPA_FONTDIR=/usr/lib/fonts
 export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=/dev/input/event0
 ```
 >> 理论上应该用`QT_QPA_GENERIC_PLUGINS`就足够了，但是我们自己的Qt程序在全志的SDK上，
@@ -376,6 +375,7 @@ export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS=/dev/input/event0
 
 ### 字体
 ```bash
+export QT_QPA_FONTDIR=/usr/lib/fonts
 export QT_QPA_FONTDIR=/usr/share/fonts/wqy-zenhei
 ```
 
