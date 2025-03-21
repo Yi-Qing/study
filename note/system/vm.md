@@ -86,28 +86,30 @@ Host myvm
 
 ## 环境变量
 对于自身支持3D加速的系统，主机端务必不要配置支持`opengl`功能，不一定好用，特别是比如`VcXsrv`的`wgl`功能。
-然后不需要配置任何环境变量，只需要配置了`DISPLAY`即可，让他默认使用直接硬件渲染。下面的都是错误的，不好用。
+不需要配置任何环境变量，只需要配置了`DISPLAY`即可，让他默认使用直接硬件渲染。
 
-对于使用VcXsrv opengl的情况，还需要配置环境变量`export LIBGL_ALWAYS_INDIRECT=1`
-> 还有一个环境变量可用：`export MESA_GL_VERSION_OVERRIDE=3.3`
-> 对于Qml的程序，还需要配置一个`export QT_XCB_GL_INTEGRATION=none`
+下面是针对不支持`3D`加速的系统的配置，这里以`VcXsrv opengl`的情况为例:
+1. `export LIBGL_ALWAYS_INDIRECT=1`: 间接渲染，强制不使用本地硬件渲染
+2. `export MESA_GL_VERSION_OVERRIDE=3.3`: 强制指定`opengl`版本为`3.3`
+3. `export QT_XCB_GL_INTEGRATION=none`: 强制使用软件渲染代替`opengl`渲染，可以试试`xcb`或`mesa`
 
 # 访问与主机同网段的另外一台电脑
 对于`vmware`使用`NAT`模式时候，可以直接访问主机同网段的其他电脑，不需要做任何配置。
 
-# vmware空间压缩
+# vmware
+## vmware空间压缩
 除了直接使用`vmware`程序自带的压缩功能外，还可以在虚拟机系统的执行一些操作来压缩，
 之所以需要这样，是因为有时候实体硬盘不够用，而使用程序自带的压缩功能，至少需要同等大小的硬盘空间。
 下面是操作方法与理论：
 
-## 理论
+### 理论
 由于`vmware`对硬盘的存储方式使用了`稀疏文件`的形式，所以只要我们可以把多余的要删除的空间全部填0，
 然后再恢复对应的存储形式即可。
 
 同时，为什么对于虚拟机软件来说，看到的空间依然是存在内容的，就在于，我们从系统中执行删除操作，
 只是删除了文件实际内容的索引信息，但是文件本身还是存在于系统中的，这也是我们误删文件后还能找回的根本。
 
-## 操作
+### 操作
 对于第一步，直接使用`dd`命令即可，之后再从文件系统层面中删除这个文件即可。
 ```bash
 dd if=/dev/zero of=wipefile bs=1G count=10; /usr/bin/rm wipefile
@@ -118,7 +120,30 @@ dd if=/dev/zero of=wipefile bs=1G count=10; /usr/bin/rm wipefile
 sudo vmware-tools-cmd disk shrinkonly
 ```
 
-## 注意
+### 注意
 由于想要把文件从原始的情况转换成稀疏文件，这时候需要一次拷贝过程，
 所以实体硬盘的剩余空间也需要保证满足对应的最终稀疏文件的最小大小。
 这时候，在创建虚拟机的时候把硬盘拆分成多个文件就是一个很好的选择。
+
+## 卡顿
+### 大小核
+分配vmware管理员权限，供vmware自行调配大小核分配，一定不要分配超过主机大核心数量，避免卡顿。
+
+### cpu分配
+分配多线程时，应该注意处理器数量为1，每个处理器的内核数量才是想要配置的。如果写反了，也会卡顿。
+
+## 后台运行
+"vmware_path\vmrun.exe" -T ws start "vm_machine_path\machine_name.vmx" nogui
+
+## 共享文件目录，但是找不到
+使用`open-vm-tools`而不是安装`vmware-tools`，这时候就可能出现找不到共享目录的问题，
+[只需要在`etc/fstab`后面添加一行即可自动挂载](https://www.jianshu.com/p/1fc383f560cd)
+
+```
+.host:/  /mnt/hgfs  fuse.vmhgfs-fuse  allow_other  0  0
+```
+
+> 或者也可以每次手动挂载：
+> ```bash
+> vmhgfs-fuse .host:/ /mnt/hgfs -o subtype=vmhgfs-fuse,allow_other
+> ```
