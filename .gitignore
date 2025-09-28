@@ -1,0 +1,27 @@
+# common
+.cache/
+out/
+build*/
+a.out
+*.o
+*.user
+compile_commands.json
+*.patch
+*.exe
+*.a
+*.so
+*.lib
+*.dll
+
+# vscode
+.vscode/
+
+# MDK
+*.uvguix.*
+*.uvgui.*
+JLinkLog.txt
+Listings/
+Objects/
+
+# msvc
+*.obj
