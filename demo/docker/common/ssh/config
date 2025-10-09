@@ -1,0 +1,9 @@
+Host github.com
+Hostname ssh.github.com
+Port 443
+ProxyCommand nc -v -x 127.0.0.1:10808 %h %p
+
+Host gitlab.gnome.org
+Hostname ssh.gitlab.gnome.org
+Port 443
+ProxyCommand nc -v -x 127.0.0.1:10808 %h %p

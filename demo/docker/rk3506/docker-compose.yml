@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  rk3506:
+    init: true
+    build:
+      context: ../
+      dockerfile: rk3506/Dockerfile
+    image: rk3506:V1.0.0
+    hostname: rk3506
+    container_name: rk3506
+    ulimits:
+      nofile:
+        soft: 1024
+        hard: 524288
+    ports:
+      - "18895:22"
+    volumes:
+      - /srv/tftp/:/srv/tftp
+      - /mnt/hgfs/share:/mnt/hgfs/share
+      - ~/.local/bin:/root/.local/bin:ro
+      - /workspace/rk3506:/workspace/rk3506
+      - /workspace/note:/workspace/note
+      - ~/.local/share/todo:/root/.local/share/todo
+    restart: unless-stopped

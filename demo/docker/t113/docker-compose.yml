@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  t113:
+    init: true
+    build:
+      context: ../
+      dockerfile: t113/Dockerfile
+    image: t113:V1.0.9
+    hostname: t113
+    container_name: t113
+    ulimits:
+      nofile:
+        soft: 1024
+        hard: 524288
+    ports:
+      - "18898:22"
+    volumes:
+      - /srv/tftp/:/srv/tftp
+      - /mnt/hgfs/share:/mnt/hgfs/share
+      - ~/.local/bin:/root/.local/bin:ro
+      - /workspace/t113:/workspace/t113
+      - /workspace/note:/workspace/note
+      - ~/.local/share/todo:/root/.local/share/todo
+    restart: unless-stopped

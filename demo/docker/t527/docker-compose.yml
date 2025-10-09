@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  t527:
+    init: true
+    build:
+      context: ../
+      dockerfile: t527/Dockerfile
+    image: t527:V1.0.8
+    hostname: t527
+    container_name: t527
+    ulimits:
+      nofile:
+        soft: 1024
+        hard: 524288
+    ports:
+      - "18897:22"
+    volumes:
+      - /srv/tftp/:/srv/tftp
+      - /mnt/hgfs/share:/mnt/hgfs/share
+      - ~/.local/bin:/root/.local/bin:ro
+      - /workspace/t527:/workspace/t527
+      - /workspace/note:/workspace/note
+      - ~/.local/share/todo:/root/.local/share/todo
+    restart: unless-stopped

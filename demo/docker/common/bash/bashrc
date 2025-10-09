@@ -1,0 +1,38 @@
+#!/bin/env bash
+# If not running interactively, don't do anything
+[[ "$-" != *i* ]] && return
+
+# history
+## don't put duplicate lines in the history.
+HISTCONTROL=ignoredups:ignorespace
+## append to the history file, don't overwrite it
+shopt -s histappend
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+if [ -n "${XDG_VTNR}" ];  then
+    # check is running in vt, such like CTRL+ALT+F1
+    PS1='\[\033[07;37m\] \$ \[\033[01;33m\]\w\[\033[00m\] '
+elif  [ "$COLORTERM" == "truecolor" ];   then
+    # https://juejin.cn/post/6920241597846126599
+    PS1='\[\e[1;7;38;23;124;176m\] \$ \[\e[3;38;2;136;173;166m\]\w\[\e[00m\] '
+else
+    PS1='\[\033[07;37m\] \$ \[\033[01;33m\]\w\[\033[00m\] '
+fi
+
+# shellcheck source=/dev/null
+[[ -f ~/.bash_aliases ]] && . ~/.bash_aliases
+
+# shellcheck source=/dev/null
+[[ -f ~/.bash_wsl ]] && . ~/.bash_wsl
+
+# shellcheck source=/dev/null
+[[ -f ~/.bash_msys2 ]] && . ~/.bash_msys2
+
+# shellcheck source=/dev/null
+[[ -f ~/.bash_work ]] && . ~/.bash_work
+
+/bin/which say_todo.sh > /dev/null 2>&1 && say_todo.sh
+

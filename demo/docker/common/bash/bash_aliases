@@ -1,0 +1,77 @@
+# for cmd color
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias diff='diff --color=auto'
+
+# for cmd options
+alias l='ls -CF'
+alias ll='ls -lhF'
+alias la='ls -A'
+alias du='du -h'
+alias df='df -h'
+alias sort='sort -h'
+alias free='free -h'
+alias gcc='gcc -Wall -pedantic -Wextra'
+alias nm='nm -g'
+alias enca='enca -L zh_CN'
+alias wdiff='wdiff -n'
+
+# for fast run
+alias cl='clear'
+alias pt='ping -c4 t.cn'
+alias lg='tig status'
+alias qq='exit'
+
+# for swap cmd
+# alias rb='/bin/rm'  # disable raw rm !!!!! use \rm alt
+alias rm='trash.sh'
+alias rl='trash.sh -l'
+alias rr='trash.sh -r'
+alias rc='trash.sh -c'
+alias lmount='mount | column -t'
+
+# proxy
+runproxy() {
+    server_ip="127.0.0.1"
+    http_port="10809"
+    socks5_port="10808"
+
+    export ftp_proxy="http://${server_ip}:${http_port}";
+    export FTP_PROXY="http://${server_ip}:${http_port}";
+
+    export http_proxy="http://${server_ip}:${http_port}";
+    export HTTP_PROXY="http://${server_ip}:${http_port}";
+
+    export https_proxy="http://${server_ip}:${http_port}";
+    export HTTPS_PROXY="http://${server_ip}:${http_port}";
+
+    export all_proxy="socks5://${server_ip}:${socks5_port}";
+    export ALL_PROXY="socks5://${server_ip}:${socks5_port}";
+
+    unset server_ip;
+    unset http_port;
+    unset socks5_port;
+
+    echo "HTTP Proxy ON";
+}
+
+noproxy() {
+    unset ftp_proxy;
+    unset http_proxy;
+    unset https_proxy;
+    unset all_proxy;
+
+    unset FTP_PROXY;
+    unset HTTP_PROXY;
+    unset HTTPS_PROXY;
+    unset ALL_PROXY;
+
+    echo "HTTP Proxy OFF";
+}
+
+# simple script
+grepgbk() {
+    env LANG=LC_ALL grep -rnP --color=auto "$(echo "$1" | iconv -f UTF8 -t GB18030)" "$2";
+}

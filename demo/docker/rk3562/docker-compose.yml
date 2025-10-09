@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  rk3562:
+    init: true
+    build:
+      context: ../
+      dockerfile: rk3562/Dockerfile
+    image: rk3562:V1.0.6
+    hostname: rk3562
+    container_name: rk3562
+    ulimits:
+      nofile:
+        soft: 1024
+        hard: 524288
+    ports:
+      - "18896:22"
+    volumes:
+      - /srv/tftp/:/srv/tftp
+      - /mnt/hgfs/share:/mnt/hgfs/share
+      - ~/.local/bin:/root/.local/bin:ro
+      - /workspace/rk3562:/workspace/rk3562
+      - /workspace/note:/workspace/note
+      - ~/.local/share/todo:/root/.local/share/todo
+    restart: unless-stopped

@@ -1,0 +1,38 @@
+[user]
+	name = me
+	email = me@example.com
+[color]
+	ui = auto
+[http]
+	postBuffer = 2000000000
+	lowSpeedLimit = 0
+	lowSpeedTime = 999999
+	version = HTTP/1.1
+	sslVerify = false
+[core]
+	editor = vim
+	autocrlf = input
+	compression = -1
+	fileMode = false
+[diff]
+	tool = vimdiff
+[difftool]
+	trustExitCode = true
+#	cmd = nvim -d $LOCAL $REMOTE
+[merge]
+	tool = vimdiff
+[mergetool]
+	keepBackup = false
+#	cmd = nvim -f -c "Gdiff" "$MERGED"
+[alias]
+	lg = log --abbrev-commit --graph
+	ss = status -suall
+	tg = tag --list --sort=-creatordate
+[pull]
+	rebase = true
+[http "https://github.com"]
+	proxy = socks5://127.0.0.1:10808
+[http]
+	proxy = socks5://127.0.0.1:10808
+[safe]
+	directory = /srv/tftp
