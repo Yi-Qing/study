@@ -75,6 +75,11 @@ wsl -d Debian --exec dbus-launch true
 可以提供wsl2的usb设备支持(虽然不耽误wsl2内核自己没编译存储设备模块功能，还是用不了U盘/SD卡)。
 > [参考](https://learn.microsoft.com/zh-cn/windows/wsl/connect-usb)
 
+## docker with mirrored network
+在wsl2使用镜像网络模式的时候，docker会无法转发端口，目前可以确定的是docker版本大于27.3后问题解决。
+> [又有一种说法是wsl2版本高于2.3.11后就已经解决了](https://github.com/microsoft/WSL/releases/tag/2.3.11)
+>> 反正我在使用`podman 5.4.2`与`wsl2 2.6.1`的时候是没有问题。
+
 # WSL1
 ## signal
 wsl1下使用无法实现`SA_RESTART`标志重启慢系统调用，怀疑为转译问题，win内核可能不支持
