@@ -67,6 +67,27 @@ PermitEmptyPasswords no  # 禁止空密码登录
 Restart-Service sshd
 ```
 
+## vscodium
+这是一个去除了微软官方监测接口的第三方程序，但是不能使用微软的`remote`功能，好在这两年发展不错，
+有一个名为`open-remote-ssh`的插件，但是这个有一个对于我们这些有长城防火墙的用户来说比较麻烦的点，
+微软的`remote`可以配置下载服务器时的代理功能，而这个版本的不支持：
+```jsonc
+    "remote.SSH.httpProxy": {
+        "httpProxy": "http://192.168.20.2:10809",
+    },
+    "remote.SSH.httpsProxy": {
+        "httpsProxy": "http://192.168.20.2:10809",
+    },
+```
+好在通过查看日志后发现，它是使用的`wget`下载，这时候可以手动先ssh上去服务器，配置一个`~/.wgetrc`：
+```conf
+use_proxy=on
+ftp_proxy=127.0.0.1:10809
+http_proxy=127.0.0.1:10809
+https_proxy=127.0.0.1:10809
+```
+这样可以强制让`wget`下载服务器的时候通过代理来完成下载。
+
 ## 老旧系统
 按照[官方文档](https://code.visualstudio.com/docs/remote/faq#_can-i-run-vs-code-server-on-older-linux-distributions)
 如果想要使用`remote-server`功能，需要满足以下要求：
