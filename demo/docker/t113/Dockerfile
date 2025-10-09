@@ -11,8 +11,8 @@ RUN apt update && apt install -y apt-transport-https ca-certificates
 RUN sed -i 's/http/https/g' /etc/apt/sources.list
 RUN apt update && apt upgrade -y && apt install --install-recommends -y \
     openssh-server bash-completion tig bear curl wget bsdmainutils \
-    locales shellcheck netcat-openbsd vim file pv
-COPY common/other/distro/buster/clangd /usr/bin/clangd
+    locales shellcheck netcat-openbsd vim file pv clangd-16
+RUN ln -sf /usr/bin/clangd-16 /usr/bin/clangd
 
 # 安装开发工具链和SSH
 RUN apt install --install-recommends -y \
