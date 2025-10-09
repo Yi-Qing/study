@@ -10,6 +10,46 @@
 这时候就可以通过如下快捷键是`ctrl + alt + ~`在vscode中打开一个本地的`powershell`终端。
 > 对应的命令ID为：`workbench.action.terminal.newLocal`
 
+### default shell
+至少在`windows`平台，强制只能使用`powershell`，而且还不能改，这就让人很难受。
+通过查询发现一种绕过的方式：打开`powershell`后自动执行一个脚本启动目标`shell`。
+通过进入`powershell`后执行`echo $PROFILE`找到当前会自动加载哪一个脚本。
+然后创建该脚本，内容写入：
+```powershell
+# Function to start MSYS2 manually
+function Start-Msys2 {
+    param(
+        [string]$System = "UCRT64"
+    )
+    
+    $msys2Path = "D:\msys64\usr\bin\bash.exe"
+    
+    if (Test-Path $msys2Path) {
+        $env:MSYSTEM = $System
+        $env:MSYS = "winsymlinks:nativestrict"
+        $env:MSYS2_PATH_TYPE = "inherit"
+        $env:CHERE_INVOKING = "enabled_from_arguments"
+        
+        Write-Host "Starting MSYS2 $System..." -ForegroundColor Green
+        & $msys2Path --login -i
+    } else {
+        Write-Warning "MSYS2 not found at path: $msys2Path"
+    }
+}
+
+# Set alias
+Set-Alias msys2 Start-Msys2
+
+# Auto-detect VS Code environment
+if ($env:TERM_PROGRAM -eq "vscode") {
+    Write-Host "VS Code environment detected, auto-starting MSYS2 UCRT64" -ForegroundColor Cyan
+    Start-Msys2 -System "UCRT64"
+}
+```
+这样一来，通过`vscode`打开`powershell`就会检测到`TERM_PROGRAM`环境变量，从而自动启动到`msys2`环境。
+同时也可以从常规的`powershell`中手动执行`msys2`命令进入`msys2`环境。
+
+### ssh方案
 ~~还可以从目标机器反向`ssh`到`win`系统中。此时需要如下步骤：~~
 1. 在`win`系统中安装`openssh-server`软件，并启动服务。
 2. 配置自启动项，使`openssh-server`服务在系统启动时自动启动。
@@ -18,27 +58,27 @@
 1. 修改默认终端为`powershell`。
 2. 限制只能使用`ssh-key`密钥登录，毕竟win系统一般是作为host机器使用，不应该暴露在公网上。
 
-### 安装
+#### 安装
 启动具有**管理员**权限的终端，执行以下命令：
 ```powershell
 Get-WindowsCapability -Online | ? Name -like 'OpenSSH*' # 查询当前状态
 Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0 # 安装openssh-server, 注意版本号
 ```
 
-### 自启动
+#### 自启动
 启动具有**管理员**权限的终端，执行以下命令：
 ```powershell
 Set-Service -Name ssh-agent -StartupType 'Automatic' # 设置ssh-agent服务自启动
 Set-Service -Name sshd -StartupType 'Automatic' # 设置sshd服务自启动
 ```
 
-### 默认终端
+#### 默认终端
 启动具有**管理员**权限的终端，执行以下命令：
 ```powershell
 New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -PropertyType String -Force
 ```
 
-### 限制登录
+#### 限制登录
 拷贝当前系统的`id_rsa.pub`公钥到当前系统的`C:\Users\用户名\.ssh\authorized_keys`文件中
 ```powershell
 scp C:\Users\用户名\.ssh\id_rsa.pub 用户名@目标机器地址:C:\Users\用户名\.ssh\authorized_keys
