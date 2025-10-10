@@ -9,7 +9,7 @@ RUN apt update && apt install -y apt-transport-https ca-certificates
 # 安装常用工具
 RUN sed -i 's/http/https/g' /etc/apt/sources.list
 RUN apt update && apt upgrade -y && apt install --install-recommends -y \
-    openssh-server bash-completion tig libspdlog1 curl wget bsdmainutils \
+    openssh-server bash-completion git libspdlog1 curl wget bsdmainutils \
     locales shellcheck netcat-openbsd vim file pv clangd-16
 RUN ln -sf /usr/bin/clangd-16 /usr/bin/clangd
 

@@ -6,7 +6,7 @@ services:
     build:
       context: ../
       dockerfile: imx6/Dockerfile
-    image: imx6:V1.0.8
+    image: imx6:V1.0.9
     hostname: imx6
     container_name: imx6
     ulimits:

@@ -6,7 +6,7 @@ services:
     build:
       context: ../
       dockerfile: t113/Dockerfile
-    image: t113:V1.0.9
+    image: t113:V1.0.10
     hostname: t113
     container_name: t113
     ulimits:

@@ -9,7 +9,7 @@ RUN apt update && apt install -y apt-transport-https ca-certificates
 # 安装常用工具
 RUN sed -i 's/http/https/g' /etc/apt/sources.list.d/debian.sources
 RUN apt update && apt upgrade -y && apt install --install-recommends -y \
-    openssh-server bash-completion tig bear curl wget bsdmainutils \
+    openssh-server bash-completion git bear curl wget bsdmainutils \
     locales shellcheck netcat-openbsd vim file pv clangd-19
 RUN ln -sf /usr/bin/clangd-19 /usr/bin/clangd
 

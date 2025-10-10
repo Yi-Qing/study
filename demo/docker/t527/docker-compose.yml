@@ -6,7 +6,7 @@ services:
     build:
       context: ../
       dockerfile: t527/Dockerfile
-    image: t527:V1.0.8
+    image: t527:V1.0.9
     hostname: t527
     container_name: t527
     ulimits:

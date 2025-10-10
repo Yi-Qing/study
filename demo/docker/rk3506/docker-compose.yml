@@ -6,7 +6,7 @@ services:
     build:
       context: ../
       dockerfile: rk3506/Dockerfile
-    image: rk3506:V1.0.0
+    image: rk3506:V1.0.1
     hostname: rk3506
     container_name: rk3506
     ulimits:

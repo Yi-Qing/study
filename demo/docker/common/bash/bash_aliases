@@ -21,7 +21,7 @@ alias wdiff='wdiff -n'
 # for fast run
 alias cl='clear'
 alias pt='ping -c4 t.cn'
-alias lg='tig status'
+alias lg='lazygit'
 alias qq='exit'
 
 # for swap cmd
