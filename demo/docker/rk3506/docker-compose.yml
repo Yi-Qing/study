@@ -22,4 +22,5 @@ services:
       - /workspace/rk3506:/workspace/rk3506
       - /workspace/note:/workspace/note
       - ~/.local/share/todo:/root/.local/share/todo
+      - ~/.config/lazygit:/root/.config/lazygit:ro
     restart: unless-stopped

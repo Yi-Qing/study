@@ -22,4 +22,5 @@ services:
       - /workspace/t527:/workspace/t527
       - /workspace/note:/workspace/note
       - ~/.local/share/todo:/root/.local/share/todo
+      - ~/.config/lazygit:/root/.config/lazygit:ro
     restart: unless-stopped

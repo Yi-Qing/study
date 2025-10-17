@@ -22,4 +22,5 @@ services:
       - /workspace/t113:/workspace/t113
       - /workspace/note:/workspace/note
       - ~/.local/share/todo:/root/.local/share/todo
+      - ~/.config/lazygit:/root/.config/lazygit:ro
     restart: unless-stopped
