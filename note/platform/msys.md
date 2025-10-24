@@ -118,3 +118,27 @@ local function config_env(config)
     end
 end
 ```
+
+# 链接程序时报错
+有时候使用`ld.exe`链接最终程序的时候会报错：
+```log
+ld.exe: error: export ordinal too large: 97886
+```
+全网搜索后发现可以添加一个编译参数`--exclude-libs=ALL`解决，比如我编译`rio`的时候：
+修改`.cargo/config.toml`:
+```patch
+diff --git a/.cargo/config.toml b/.cargo/config.toml
+index 72d09cf015..385dff94ce 100644
+--- a/.cargo/config.toml
++++ b/.cargo/config.toml
+@@ -11,3 +11,9 @@ rustflags = [
+     # these capabilities, so let's optimize for them
+     "-Ctarget-cpu=apple-m1"
+ ]
++
++[target.x86_64-pc-windows-gnu]
++linker = "x86_64-w64-mingw32-gcc"
++rustflags = [
++    "-C", "link-args=-Wl,--exclude-libs=ALL",
++]
+```
