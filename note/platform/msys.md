@@ -8,6 +8,13 @@
 > 2. 记得添加相应目录到`PATH`环境变量。
 >> 使用这种方式，我不能完全确定不会因为`MSYS2`和`WIN`路径的原因导致问题。
 
+### bash补全
+从网络上了解到windows版的Git是自带补全功能的，而bash的补全其实是通过读取一些相关文件来实现的，这就有了快速移植的可能。
+我们可以拷贝`MinGit`的补全文件到`msys2`环境下就可以了。这里我们需要知道两个路径，也就是文件从哪里来，放到哪里。
+对于`msys2`，其路径固定为`/usr/share/bash-completion/completions/git`，
+对于`MinGit`，其路径根据版本有一定差距，旧一点的版本为`/mingw64/share/git/completion/git-completion.bash`，
+新一点的版本则是`/mingw64/share/bash-completion/completions/git`。
+
 ## 解法二
 [脚本安装](https://gitforwindows.org/install-or-update-inside-msys2-cygwin-or-git-for-windows-itself.html)
 安装官方版本到`MSYS2`中，可以在安装之前在脚本中添加如下内容提供`tig`软件，安装完毕后在环境变量中添加/cmd路径提供git功能。
