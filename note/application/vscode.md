@@ -143,7 +143,9 @@ https_proxy=127.0.0.1:10809
 # section: can-i-run-vs-code-server-on-older-linux-distributions
 # ref-url: https://github.com/naitaku/old-linux-vscode/blob/main/Dockerfile
 
-os_version=$(grep VERSION_CODENAME /etc/os-release | cut -d= -f2)
+#shellcheck source=/dev/null
+. /etc/os-release 2>/dev/null
+VERSION_ID="${VERSION_ID%%.*}"
 
 if [ "$(id -u)" != 0 ]; then
     echo "This script must be run as root"
@@ -165,7 +167,7 @@ update() {
     echo "           update and install depend-tools           "
     echo "====================================================="
 
-    apt-get update && apt-get install -y \
+    apt-get update && apt-get install -y --fix-missing \
         gcc g++ gperf bison flex texinfo help2man make libncurses5-dev \
         python3-dev autoconf automake libtool libtool-bin gawk wget bzip2 \
         xz-utils unzip patch rsync meson ninja-build
@@ -205,11 +207,14 @@ build_sysroot() {
     # shellcheck disable=SC3043
     local url_prefix2="microsoft/vscode-linux-build-agent/refs/heads/main/"
     # shellcheck disable=SC3043
-    if [ "$os_version" = "xenial" ] || [ "$os_version" = "stretch" ]; then
+    if [ "$ID" = "ubuntu" ] && [ "$VERSION_ID" -lt "18" ]; then
+        local file="x86_64-gcc-8.5.0-glibc-2.28.config"
+    elif [ "$ID" = "debian" ] && [ "$VERSION_ID" -lt "10" ]; then
         local file="x86_64-gcc-8.5.0-glibc-2.28.config"
     else
         local file="x86_64-gcc-10.5.0-glibc-2.28.config"
     fi
+    echo "load config file: $file"
 
     # shellcheck disable=SC3043
     local toolchain_dir="$pwd/toolchain"
