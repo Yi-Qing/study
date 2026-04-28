@@ -90,11 +90,12 @@ Host myvm
 
 下面是针对不支持`3D`加速的系统的配置，这里以`VcXsrv opengl`的情况为例:
 1. `export LIBGL_ALWAYS_INDIRECT=1`: 间接渲染，强制不使用本地硬件渲染
-2. `export MESA_GL_VERSION_OVERRIDE=3.3`: 强制指定`opengl`版本为`3.3`
-3. `export QT_XCB_GL_INTEGRATION=none`: 强制使用软件渲染代替`opengl`渲染，可以试试`xcb`或`mesa`
+2. `export LIBGL_ALWAYS_SOFTWARE=true`: 间接渲染，强制不使用本地硬件渲染(WSL需要)
+3. `export MESA_GL_VERSION_OVERRIDE=3.3`: 强制指定`opengl`版本为`3.3`
+4. `export QT_XCB_GL_INTEGRATION=none`: 强制使用软件渲染代替`opengl`渲染，可以试试`xcb`或`mesa`
 
 ## 安全控制
-默认情况下`VcXsrv`只允许`localhost`访问，对于需要把虚拟机一类的用户，是无法显示内容在主机上的，
+默认情况下`VcXsrv`只允许`localhost`访问，对于需要远程虚拟机一类的用户，是无法显示内容在主机上的，
 一般的教程都是说在启动`XLaunch`的时候关闭`access control`，但是这样一来又不安全了，
 好在`VcXsrv`提供了另外的功能，允许使用`xauth`控制访问权限，当然，其对应的控制权文件无法在`win`上生成，
 我们需要在允许显示的`linux`中生成好以后共享给`windows`。
