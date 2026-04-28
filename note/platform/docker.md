@@ -94,14 +94,14 @@ docker load -i <文件名>.tar
 
 ## 1. 获取镜像
 ```bash
-docker pull ubuntu:bionic-20230530
+docker pull ubuntu:bionic
 ```
 
 ## 2. 运行容器
 ```bash
 docker_mount="-v $(pwd):/workspace -w /workspace"
 name="u1804"
-image="ubuntu:bionic-20230530"
+image="ubuntu:bionic"
 docker run -itd $docker_mount --name $name --hostname $name $image /bin/bash
 ```
 > ~~如果要`--ipc=host`同时使用命名空间，需要添加`-v /dev/mqueue:/dev/mqueue`等参数，否则会报错。~~
